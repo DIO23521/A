@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог Аниме</title>
+</head>
+<body>
+    <h1>Список всех аниме</h1>
+
+    <div class="anime-list">
+        {% for anime in animes %}
+            <div class="anime-card">
+                <h2>{{ anime.title }}</h2>
+                
+                {% if anime.poster %}
+                    <img src="{{ anime.poster.url }}" alt="{{ anime.title }}" width="200">
+                {% endif %}
+
+                <p>{{ anime.description|truncatewords:20 }}</p>
+                
+                <a href="{% url 'main:anime_detail' anime.slug %}">Подробнее</a>
+            </div>
+            <hr>
+        {% empty %}
+            <p>Аниме пока не добавлено.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

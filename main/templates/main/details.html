@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ anime.title }}</title>
+</head>
+<body>
+    <a href="{% url 'main:home' %}">← Назад к списку</a>
+
+    <h1>{{ anime.title }}</h1>
+
+    {% if anime.poster %}
+        <img src="{{ anime.poster.url }}" alt="Постер" width="400">
+    {% endif %}
+
+    <h3>Жанры:</h3>
+    <ul>
+        {% for genre in anime.genres.all %}
+            <li>{{ genre.title }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Описание:</h3>
+    <p>{{ anime.description }}</p>
+
+    <hr>
+    <h3>Галерея кадров:</h3>
+    <div class="gallery">
+        {% for item in gallery %}
+            {% if item.image %}
+                <img src="{{ item.image.url }}" alt="Кадр из {{ anime.title }}" width="250" style="margin: 5px;">
+            {% endif %}
+        {% empty %}
+            <p>Кадров пока нет.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
