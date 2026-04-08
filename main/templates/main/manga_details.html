@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ manga.title }}</title>
+    <style>
+        .container { max-width: 800px; margin: 0 auto; font-family: sans-serif; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #007bff; text-decoration: none; }
+        .manga-header { display: flex; gap: 30px; margin-bottom: 30px; }
+        .manga-poster { width: 300px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .gallery img { width: 100%; border-radius: 4px; }
+        .adaptation-list { background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 5px solid #007bff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'main:home' %}" class="back-link">← На главную</a>
+
+        <div class="manga-header">
+            {% if manga.poster %}
+                <img src="{{ manga.poster.url }}" alt="{{ manga.title }}" class="manga-poster">
+            {% endif %}
+            
+            <div>
+                <h1>{{ manga.title }}</h1>
+                <p><strong>Жанры:</strong> 
+                    {% for genre in manga.genres.all %}
+                        {{ genre.title }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                
+                {% if manga.adaptation.all %}
+                <div class="adaptation-list">
+                    <h3>🎬 Аниме-адаптации:</h3>
+                    <ul>
+                        {% for anime in manga.adaptation.all %}
+                            <li>
+                                <a href="{% url 'main:anime_detail' anime.slug %}">
+                                    {{ anime.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <h3>Описание</h3>
+        <p>{{ manga.description }}</p>
+
+        <hr>
+
+        <h3>Галерея страниц/кадров</h3>
+        <div class="gallery">
+            {% for item in m_gallery %}
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="Кадр манги">
+                {% endif %}
+            {% empty %}
+                <p>Изображения для галереи пока не добавлены.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

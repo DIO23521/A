@@ -2,28 +2,106 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Каталог Аниме</title>
+    <title>Anime & Manga List</title>
+    <style>
+        /* Стили для расположения элементов как на твоем рисунке */
+        .header-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Центрируем всё содержимое */
+            margin-top: 20px;
+        }
+
+        .tabs {
+            margin-bottom: 30px; /* Отступ от кнопок до заголовка */
+        }
+
+        .tab-btn {
+            padding: 10px 25px;
+            cursor: pointer;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+
+        .tab-btn.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        .main-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 40px; /* Отступ до начала списка */
+        }
+
+        .hidden { display: none; }
+        
+        /* Стили для карточек (пример как на твоем скриншоте) */
+        .content-item { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .poster { width: 200px; display: block; margin-bottom: 10px; }
+    </style>
 </head>
 <body>
-    <h1>Anime List</h1>
 
-    <div class="anime-list">
+    <div class="header-container">
+        <div class="tabs">
+            <button class="tab-btn active" id="btn-anime" onclick="showSection('anime')">Аниме</button>
+            <button class="tab-btn" id="btn-manga" onclick="showSection('manga')">Манга</button>
+        </div>
+
+        <div class="main-title">Любимые Произведения</div>
+    </div>
+
+    <div id="section-anime">
         {% for anime in animes %}
-            <div class="anime-card">
+            <div class="content-item">
                 <h2>{{ anime.title }}</h2>
-                
                 {% if anime.poster %}
-                    <img src="{{ anime.poster.url }}" alt="{{ anime.title }}" width="200">
+                    <img src="{{ anime.poster.url }}" class="poster" alt="{{ anime.title }}">
                 {% endif %}
-
                 <p>{{ anime.description|truncatewords:20 }}</p>
-                
                 <a href="{% url 'main:anime_detail' anime.slug %}">Подробнее</a>
             </div>
-            <hr>
-        {% empty %}
-            <p>Аниме пока не добавлено.</p>
         {% endfor %}
     </div>
+
+    <div id="section-manga" class="hidden">
+        {% for manga in mangas %}
+            <div class="content-item">
+                <h2>{{ manga.title }}</h2>
+                {% if manga.poster %}
+                    <img src="{{ manga.poster.url }}" class="poster" alt="{{ manga.title }}">
+                {% endif %}
+                <p>{{ manga.description|truncatewords:20 }}</p>
+                <a href="#">Подробнее о манге</a>
+            </div>
+        {% empty %}
+            <p style="text-align: center;">Манга еще не добавлена в базу.</p>
+        {% endfor %}
+    </div>
+
+    <script>
+        function showSection(type) {
+            const animeSec = document.getElementById('section-anime');
+            const mangaSec = document.getElementById('section-manga');
+            const animeBtn = document.getElementById('btn-anime');
+            const mangaBtn = document.getElementById('btn-manga');
+
+            if (type === 'anime') {
+                animeSec.classList.remove('hidden');
+                mangaSec.classList.add('hidden');
+                animeBtn.classList.add('active');
+                mangaBtn.classList.remove('active');
+            } else {
+                mangaSec.classList.remove('hidden');
+                animeSec.classList.add('hidden');
+                mangaBtn.classList.add('active');
+                animeBtn.classList.remove('active');
+            }
+        }
+    </script>
+
 </body>
 </html>
