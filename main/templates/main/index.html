@@ -75,7 +75,7 @@
                     <img src="{{ manga.poster.url }}" class="poster" alt="{{ manga.title }}">
                 {% endif %}
                 <p>{{ manga.description|truncatewords:20 }}</p>
-                <a href="#">Подробнее о манге</a>
+                <a href="{% url 'main:manga_detail' manga.slug %}">Подробнее о манге</a>
             </div>
         {% empty %}
             <p style="text-align: center;">Манга еще не добавлена в базу.</p>
