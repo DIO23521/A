@@ -3,36 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ anime.title }}</title>
+    <style>
+        .container { max-width: 800px; margin: 0 auto; font-family: sans-serif; padding: 20px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #007bff; text-decoration: none; }
+        .anime-header { display: flex; gap: 30px; margin-bottom: 30px; }
+        .anime-poster { width: 300px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .info-block { flex: 1; }
+        .source-box { background: #eef7ff; padding: 15px; border-radius: 8px; border-left: 5px solid #007bff; margin-top: 15px; }
+        .original-idea { color: #666; font-style: italic; margin-top: 10px; display: block; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .gallery img { width: 100%; border-radius: 4px; transition: 0.3s; }
+        .gallery img:hover { transform: scale(1.05); }
+    </style>
 </head>
 <body>
-    <a href="{% url 'main:home' %}">← Назад к списку</a>
+    <div class="container">
+        <a href="{% url 'main:home' %}" class="back-link">← На главную</a>
 
-    <h1>{{ anime.title }}</h1>
-
-    {% if anime.poster %}
-        <img src="{{ anime.poster.url }}" alt="Постер" width="400">
-    {% endif %}
-
-    <h3>Жанры:</h3>
-    <ul>
-        {% for genre in anime.genres.all %}
-            <li>{{ genre.title }}</li>
-        {% endfor %}
-    </ul>
-
-    <h3>Описание:</h3>
-    <p>{{ anime.description }}</p>
-
-    <hr>
-    <h3>Галерея кадров:</h3>
-    <div class="gallery">
-        {% for item in gallery %}
-            {% if item.image %}
-                <img src="{{ item.image.url }}" alt="Кадр из {{ anime.title }}" width="250" style="margin: 5px;">
+        <div class="anime-header">
+            {% if anime.poster %}
+                <img src="{{ anime.poster.url }}" alt="{{ anime.title }}" class="anime-poster">
             {% endif %}
-        {% empty %}
-            <p>Кадров пока нет.</p>
-        {% endfor %}
+            
+            <div class="info-block">
+                <h1>{{ anime.title }}</h1>
+                
+                <p><strong>Жанры:</strong> 
+                    {% for genre in anime.genres.all %}
+                        {{ genre.title }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+
+                <div class="source-box">
+                    <h3>📖 Первоисточник:</h3>
+                    {% if anime.source %}
+                        <p>Манга: 
+                            <a href="{% url 'main:manga_detail' anime.source.slug %}">
+                                {{ anime.source.title }}
+                            </a>
+                        </p>
+                    {% else %}
+                        <span class="original-idea">Оригинальная идея</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <h3>Описание</h3>
+        <p>{{ anime.description }}</p>
+
+        <hr>
+
+        <h3>Галерея кадров</h3>
+        <div class="gallery">
+            {% for item in gallery %}
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="Кадр из аниме">
+                {% endif %}
+            {% empty %}
+                <p>Кадры пока не добавлены.</p>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>

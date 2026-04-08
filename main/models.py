@@ -27,7 +27,7 @@ class Manga(models.Model):
     slug = models.SlugField(unique=True)
     description = models.TextField()
     poster = models.ImageField(upload_to='main_manga_poster/', null=True, blank=True)
-    adaptation = models.ManyToManyField('Anime', blank=True)
+    adaptation = models.ManyToManyField('Anime', blank=True, related_name='adaptations')
     genres = models.ManyToManyField(Genre)
 
     def save(self, *args, **kwargs):
@@ -55,7 +55,7 @@ class Anime(models.Model):
         'Manga', 
         on_delete=models.SET_NULL, 
         null=True, 
-        blank=True
+        blank=True,
     )
     genres = models.ManyToManyField(Genre)
 

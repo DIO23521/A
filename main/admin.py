@@ -34,7 +34,7 @@ class GenreAdmin(admin.ModelAdmin):
 @admin.register(models.Anime)
 class AnimeAdmin(admin.ModelAdmin):
     list_display = ['title']
-    list_filter = ['genres']
+    autocomplete_fields = ['genres', 'source']
     search_fields = ['title', 'description']
     prepopulated_fields = {'slug': ('title',)}
     inlines = [AnimeImageInLine]
@@ -43,7 +43,7 @@ class AnimeAdmin(admin.ModelAdmin):
 @admin.register(models.Manga)
 class MangaAdmin(admin.ModelAdmin):
     list_display = ['title']
-    list_filter = ['genres']
+    autocomplete_fields = ['genres', 'adaptation']
     search_fields = ['title', 'description']
     prepopulated_fields = {'slug': ('title',)}
     inlines = [MangaImageInLine]
