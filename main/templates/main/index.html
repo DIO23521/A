@@ -113,3 +113,14 @@
 
 </body>
 </html>
+{% if user.is_authenticated %}
+    <p>Вы вошли как: <strong>{{ user.username }}</strong></p>
+    
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Выйти</button>
+    </form>
+{% else %}
+    <a href="{% url 'login' %}">Войти</a> | 
+    <a href="{% url 'register' %}">Регистрация</a>
+{% endif %}
