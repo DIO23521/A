@@ -43,6 +43,14 @@
         .poster { width: 200px; display: block; margin-bottom: 10px; }
     </style>
 </head>
+<form action="{% url 'main:home' %}" method="get" style="margin-bottom: 20px;">
+    <input type="text" name="q" placeholder="Поиск аниме или манги..." value="{{ request.GET.q }}">
+    <button type="submit">Найти</button>
+    
+    {% if request.GET.q %}
+        <a href="{% url 'main:home' %}">Сбросить</a>
+    {% endif %}
+</form>
 <body>
 
     <div class="header-container">
@@ -51,7 +59,7 @@
             <button class="tab-btn" id="btn-manga" onclick="showSection('manga')">Манга</button>
         </div>
 
-        <div class="main-title">Любимые Произведения</div>
+        <div class="main-title">Peak Fiction</div>
     </div>
 
     <div id="section-anime">
@@ -78,7 +86,7 @@
                 <a href="{% url 'main:manga_detail' manga.slug %}">Подробнее о манге</a>
             </div>
         {% empty %}
-            <p style="text-align: center;">Манга еще не добавлена в базу.</p>
+            <p style="text-align: center;">Манга еще не добавлена в базу или её нет.</p>
         {% endfor %}
     </div>
 

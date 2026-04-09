@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
+from django.db.models import Q
 from .models import Anime, Genre, AnimeImage, Manga
+
 
 # Create your views here.
 
@@ -13,9 +15,23 @@ class CatalogListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['all_genres'] = Genre.objects.all()
-        context['mangas'] = Manga.objects.all()
-        context['animes'] = Anime.objects.all()
+
+        search_query = self.request.GET.get('q')
+
+        if search_query:
+            context['animes'] = Anime.objects.filter(
+                Q(title__icontains=search_query) | Q(description__icontains=search_query)
+            )
+
+            context['mangas'] = Manga.objects.filter(
+                Q(title__icontains=search_query) | Q(description__icontains=search_query)
+            )
+        else:
+            context['mangas'] = Manga.objects.all()    
         return context
+
+    
+
 
 class AnimeDetailView(DetailView):
     model = Anime
