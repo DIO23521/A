@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru"> <head>
+    <meta charset="UTF-8"> <title>Мой профиль | {{ user.username }}</title>
+    <style>
+        .avatar { width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc; }
+        .profile-info { margin-bottom: 30px; }
+        .btn-edit { padding: 10px 15px; background: orange; color: white; text-decoration: none; border-radius: 5px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <h1>Личный кабинет: {{ user.username }}</h1>
+
+    <div class="profile-info">
+        {% if user.avatar %}
+            <img src="{{ user.avatar.url }}" alt="Аватар" class="avatar">
+        {% else %}
+            <p><em>(Аватар не установлен)</em></p>
+        {% endif %}
+
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        
+        <p><strong>Имя:</strong> {{ user.get_full_name|default:"Не указано" }}</p>
+        
+        <h3>О себе:</h3>
+        <p>{{ user.bio|linebreaks|default:"Тут пока пусто..." }}</p>
+
+        <p><strong>Дата рождения:</strong> {{ user.birth_date|default:"Не указана" }}</p>
+        
+        <div style="margin-top: 20px;">
+            <a href="{% url 'users:profile_edit' %}" class="btn-edit">
+                Редактировать профиль
+            </a>
+        </div>
+    </div>   
+    <hr>
+    <a href="{% url 'main:home' %}">Назад к каталогу</a> 
+</body>
+</html>
