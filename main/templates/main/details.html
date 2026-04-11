@@ -14,6 +14,22 @@
         .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
         .gallery img { width: 100%; border-radius: 4px; transition: 0.3s; }
         .gallery img:hover { transform: scale(1.05); }
+        
+        /* Стили для кнопки лайка */
+        .like-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 28px;
+            padding: 0;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .like-button:hover { transform: scale(1.1); }
+        .like-count { font-size: 18px; color: #555; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -46,6 +62,18 @@
                         <span class="original-idea">Оригинальная идея</span>
                     {% endif %}
                 </div>
+
+                <form action="{% url 'interactions:toggle_like' 'anime' anime.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="like-button">
+                        {% if user.is_authenticated and anime.id in user_likes_ids %}
+                            ❤️
+                        {% else %}
+                            🤍
+                        {% endif %}
+                        <span class="like-count">{{ anime.anime_likes.count }}</span>
+                    </button>
+                </form>
             </div>
         </div>
 

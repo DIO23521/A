@@ -33,6 +33,33 @@
         </div>
     </div>   
     <hr>
+
+    <h2>Мои лайки</h2>
+    <div class="likes-list">
+        {% for like in user_likes %}
+            <div style="margin-bottom: 10px; padding: 10px; border: 1px solid #eee; border-radius: 5px;">
+                {% if like.anime %}
+                    <strong>Аниме:</strong> {{ like.anime.title }}
+                    <form action="{% url 'interactions:toggle_like' 'anime' like.anime.id %}" method="post" style="display:inline; margin-left: 10px;">
+                        {% csrf_token %}
+                        <button type="submit" style="background:none; border:none; cursor:pointer; color: red;">❌ Удалить</button>
+                    </form>
+                {% elif like.manga %}
+                    <strong>Манга:</strong> {{ like.manga.title }}
+                    <form action="{% url 'interactions:toggle_like' 'manga' like.manga.id %}" method="post" style="display:inline; margin-left: 10px;">
+                        {% csrf_token %}
+                        <button type="submit" style="background:none; border:none; cursor:pointer; color: red;">❌ Удалить</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>Вы еще ничего не лайкнули.</p>
+        {% endfor %}
+    </div>
+
+    <hr>
     <a href="{% url 'main:home' %}">Назад к каталогу</a> 
+</body>
+</html>
 </body>
 </html>

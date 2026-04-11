@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>{{ manga.title }}</title>
     <style>
-        .container { max-width: 800px; margin: 0 auto; font-family: sans-serif; }
+        .container { max-width: 800px; margin: 0 auto; font-family: sans-serif; padding: 20px; }
         .back-link { display: inline-block; margin-bottom: 20px; color: #007bff; text-decoration: none; }
         .manga-header { display: flex; gap: 30px; margin-bottom: 30px; }
         .manga-poster { width: 300px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
@@ -12,6 +12,22 @@
         .gallery img { width: 100%; border-radius: 4px; transition: 0.3s; }
         .gallery img:hover { transform: scale(1.05); }
         .adaptation-list { background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 5px solid #007bff; }
+
+        /* Стили для кнопки лайка */
+        .like-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 28px;
+            padding: 0;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .like-button:hover { transform: scale(1.1); }
+        .like-count { font-size: 18px; color: #555; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -23,7 +39,7 @@
                 <img src="{{ manga.poster.url }}" alt="{{ manga.title }}" class="manga-poster">
             {% endif %}
             
-            <div>
+            <div style="flex: 1;">
                 <h1>{{ manga.title }}</h1>
                 <p><strong>Жанры:</strong> 
                     {% for genre in manga.genres.all %}
@@ -45,6 +61,18 @@
                     </ul>
                 </div>
                 {% endif %}
+
+                <form action="{% url 'interactions:toggle_like' 'manga' manga.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="like-button">
+                        {% if user.is_authenticated and manga.id in user_likes_ids %}
+                            ❤️
+                        {% else %}
+                            🤍
+                        {% endif %}
+                        <span class="like-count">{{ manga.manga_likes.count }}</span>
+                    </button>
+                </form>
             </div>
         </div>
 

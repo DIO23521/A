@@ -41,7 +41,14 @@ class AnimeDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['gallery'] = self.object.images.all()
+
+        if self.request.user.is_authenticated:
+            context['user_likes_ids'] = self.request.user.user_likes.filter(
+                anime__isnull=False).values_list('anime_id', flat=True)
+            
         return context
+    
+
     
 class MangaDetailView(DetailView):
     queryset = Manga.objects.prefetch_related('adaptation')
@@ -51,4 +58,9 @@ class MangaDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['m_gallery'] = self.object.m_images.all()
+
+        if self.request.user.is_authenticated:
+            context['user_likes_ids'] = self.request.user.user_likes.filter(
+                manga__isnull=False).values_list('manga_id', flat=True)
+            
         return context
